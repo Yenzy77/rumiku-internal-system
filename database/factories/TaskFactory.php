@@ -14,10 +14,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'description' => fake()->paragraph(),
-            'assigned_to' => User::factory(),
-            'status' => fake()->randomElement(['pending', 'in_progress', 'completed']),
-            'due_date' => fake()->dateTimeBetween('now', '+1 month'),
+            'created_by' => User::factory(),
         ];
     }
 }

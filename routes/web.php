@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Models\Task;
+use App\Models\Property;
+use App\Models\TaskValue;
 use Carbon\Carbon;
 use App\Livewire\Bookkeeping\CashFlowManager;
 
@@ -19,11 +21,23 @@ use App\Livewire\Bookkeeping\CashFlowManager;
 
 // Dashboard Route
 Route::get('/', function () {
-    $activeTasksCount = Task::where('status', 'in_progress')->count();
-    $pendingApprovalsCount = Task::where('status', 'pending')->count();
-    $completedThisWeekCount = Task::where('status', 'completed')
-        ->where('updated_at', '>=', Carbon::now()->subDays(7))
-        ->count();
+    // Task stats via EAV (dynamic properties)
+    $statusProperty = Property::where('slug', 'status')->first();
+    
+    if ($statusProperty) {
+        $activeTasksCount = TaskValue::where('property_id', $statusProperty->id)
+            ->where('value', 'In Progress')->count();
+        $pendingApprovalsCount = TaskValue::where('property_id', $statusProperty->id)
+            ->where('value', 'To Do')->count();
+        $completedThisWeekCount = TaskValue::where('property_id', $statusProperty->id)
+            ->where('value', 'Done')
+            ->where('updated_at', '>=', Carbon::now()->subDays(7))
+            ->count();
+    } else {
+        $activeTasksCount = 0;
+        $pendingApprovalsCount = 0;
+        $completedThisWeekCount = 0;
+    }
 
     // Social Media & Omni-channel Stats
     $scheduledPostsCount = \App\Models\SocialPost::where('status', 'scheduled')->count();
@@ -68,3 +82,6 @@ Route::get('/social-media/analytics', \App\Livewire\SocialMedia\ApprovalAnalytic
 
 // Omni-channel Routes (Modul 5)
 Route::get('/omni-channel/inbox', \App\Livewire\OmniChannel\UnifiedInbox::class)->name('omni-channel.inbox');
+
+// Marketing Routes (Modul 6)
+Route::get('/marketing/crm', \App\Livewire\Marketing\CrmDashboard::class)->name('marketing.crm');

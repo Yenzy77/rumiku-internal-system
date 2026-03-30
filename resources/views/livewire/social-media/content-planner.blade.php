@@ -61,7 +61,7 @@
                                             </span>
                                             <span class="font-extrabold tracking-wide text-gray-700 dark:text-zinc-300 truncate capitalize text-[9px]">{{ optional($post->account)->platform }}</span>
                                         </div>
-                                        <button wire:click.stop="delete({{ $post->id }})" onclick="confirm('Hapus konten dari kalender ini?') || event.stopImmediatePropagation()" class="text-gray-300 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/post:opacity-100 transition-all bg-white dark:bg-zinc-700 rounded-full p-0.5 shadow-sm">
+                                        <button onclick="rumikuConfirm('Hapus konten dari kalender ini?', () => @this.delete({{ $post->id }}))" class="text-gray-300 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/post:opacity-100 transition-all bg-white dark:bg-zinc-700 rounded-full p-0.5 shadow-sm">
                                             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                                         </button>
                                     </div>

@@ -98,6 +98,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
             </a>
+            
+            <a href="{{ route('marketing.crm') }}" class="w-12 h-12 flex items-center justify-center rounded-[14px] transition-all duration-200 group relative {{ request()->routeIs('marketing.*') ? 'bg-[#D0F849] text-gray-900 shadow-sm' : 'bg-gray-50 dark:bg-zinc-800/80 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-700 hover:text-gray-900 dark:hover:text-zinc-100' }}" title="Marketing & CRM">
+                <svg class="w-6 h-6 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+            </a>
 
         </nav>
 
@@ -142,7 +148,7 @@
             </button>
 
             <div class="h-10 w-10 mt-1 rounded-xl bg-gray-100 dark:bg-zinc-800 overflow-hidden cursor-pointer ring-2 ring-transparent hover:ring-indigo-100 dark:hover:ring-zinc-600 transition-all shadow-sm" title="{{ auth()->check() ? auth()->user()->name : 'User' }}">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->check() ? auth()->user()->name : 'User') }}&color=111827&background=F3F4F6&bold=true" class="h-full w-full object-cover">
+                <x-boring-avatar :name="auth()->check() ? auth()->user()->name : 'User'" size="120" class="h-full w-full object-cover" />
             </div>
 
         </div>
@@ -167,6 +173,8 @@
                         Approval & Analytics
                     @elseif(request()->routeIs('omni-channel.inbox'))
                         Unified Inbox
+                    @elseif(request()->routeIs('marketing.*'))
+                        CRM & Marketing
                     @else
                         @yield('header_title', 'RUMIKU System')
                     @endif
@@ -186,6 +194,8 @@
                         Review pending content and track engagement performance across channels.
                     @elseif(request()->routeIs('omni-channel.inbox'))
                         Centralize all your customer communications from different platforms into one inbox.
+                    @elseif(request()->routeIs('marketing.*'))
+                        Manage customer target segments and execute personalized outbound campaigns.
                     @else
                         @yield('header_subtitle', 'Welcome to the RUMIKU Internal System dashboard.')
                     @endif
@@ -215,6 +225,90 @@
             </div>
         </main>
     </div>
+
+    <livewire:scripts />
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        /**
+         * Custom RUMIKU Confirmation Dialog
+         * @param {string} title - The message to display
+         * @param {function} onConfirm - Callback if confirmed
+         */
+        window.rumikuConfirm = function(title, onConfirm) {
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            Swal.fire({
+                title: title,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#D0F849',
+                cancelButtonColor: isDark ? '#3F3F46' : '#F3F4F6',
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                background: isDark ? '#18181B' : '#FFFFFF',
+                color: isDark ? '#F4F4F5' : '#18181B',
+                customClass: {
+                    popup: 'rumiku-swal-popup',
+                    title: 'rumiku-swal-title',
+                    confirmButton: 'rumiku-swal-confirm',
+                    cancelButton: 'rumiku-swal-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed && typeof onConfirm === 'function') {
+                    onConfirm();
+                }
+            });
+        };
+    </script>
+
+    <style>
+        /* SweetAlert2 Custom Theme */
+        .rumiku-swal-popup {
+            border-radius: 1.5rem !important; /* rounded-3xl */
+            font-family: "Plus Jakarta Sans", sans-serif !important;
+            padding: 2rem !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+        }
+        
+        .rumiku-swal-title {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: inherit !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .rumiku-swal-confirm {
+            border-radius: 1rem !important;
+            padding: 0.75rem 1.75rem !important;
+            font-weight: 800 !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #111827 !important; /* gray-900 */
+            border: none !important;
+        }
+        
+        .rumiku-swal-cancel {
+            border-radius: 1rem !important;
+            padding: 0.75rem 1.75rem !important;
+            font-weight: 700 !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #71717A !important; /* gray-500 */
+            border: none !important;
+        }
+
+        /* Dark mode overrides for cancel button text */
+        .dark .rumiku-swal-cancel {
+            color: #D4D4D8 !important; /* zinc-300 */
+        }
+    </style>
 
     <style>
         /* Modern Scrollbar Styling */

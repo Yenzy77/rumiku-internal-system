@@ -27,7 +27,11 @@
         },
         get selectedLabel() {
             if (!this.selected) return '{{ $placeholder }}';
-            return this.options[this.selected] || '{{ $placeholder }}';
+            let opt = this.options[this.selected];
+            if (typeof opt === 'object' && opt !== null) {
+                return opt.label || '{{ $placeholder }}';
+            }
+            return opt || '{{ $placeholder }}';
         }
     }" 
     @click.away="open = false"
@@ -44,7 +48,16 @@
         {{ $attributes->except(['wire:model', 'wire:model.live', 'class']) }}
         class="w-full flex items-center justify-between border-gray-100 dark:border-zinc-700 bg-[#F8F9FA] dark:bg-zinc-800/70 rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-[#D0F849]/20 focus:border-[#D0F849] dark:focus:border-[#D0F849] transition-all shadow-sm text-left font-bold {{ $attributes->get('class') }}"
     >
-        <span x-text="selectedLabel" class="pr-4 truncate" :class="selected ? 'text-gray-900 dark:text-zinc-100' : 'text-gray-400 dark:text-zinc-500 font-medium'"></span>
+        <div class="flex items-center gap-2 pr-4 truncate overflow-hidden">
+            @foreach($options as $val => $opt)
+                @if(is_array($opt) && isset($opt['icon']))
+                    <div x-show="selected == '{{ $val }}'" x-cloak class="flex-shrink-0">
+                        <x-icon name="{{ $opt['icon'] }}" class="w-4 h-4 text-[#D0F849]" />
+                    </div>
+                @endif
+            @endforeach
+            <span x-text="selectedLabel" :class="selected ? 'text-gray-900 dark:text-zinc-100' : 'text-gray-400 dark:text-zinc-500 font-medium'"></span>
+        </div>
         
         <svg class="flex-shrink-0 w-5 h-5 text-gray-400 dark:text-zinc-500 transition-transform duration-200 ml-3" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
@@ -72,15 +85,22 @@
         </button>
         @endif
         
-        <template x-for="(label, val) in options" :key="val">
+        @foreach($options as $val => $opt)
+            @php
+                $label = is_array($opt) ? $opt['label'] : $opt;
+                $icon = is_array($opt) ? ($opt['icon'] ?? null) : null;
+            @endphp
             <button 
                 type="button"
-                @click="selected = val; open = false;"
-                class="w-full text-left px-6 py-3 text-[13px] font-bold transition-colors"
-                :class="selected == val ? 'bg-[#D0F849]/20 text-gray-900 dark:text-zinc-100 shadow-sm' : 'text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100'"
+                @click="selected = '{{ $val }}'; open = false;"
+                class="w-full flex items-center gap-3 text-left px-6 py-4 text-[13px] font-bold transition-colors border-b border-gray-50 dark:border-zinc-800/50 last:border-0"
+                :class="selected == '{{ $val }}' ? 'bg-[#D0F849]/10 text-gray-900 dark:text-zinc-100' : 'text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100'"
             >
-                <span x-text="label"></span>
+                @if($icon)
+                    <x-icon name="{{ $icon }}" class="w-4 h-4 {{ isset($opt['icon_class']) ? $opt['icon_class'] : 'text-[#D0F849]' }}" />
+                @endif
+                <span>{{ $label }}</span>
             </button>
-        </template>
+        @endforeach
     </div>
 </div>

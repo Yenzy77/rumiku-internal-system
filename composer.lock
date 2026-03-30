@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a356947f8d436038d5f1960a1fe8a0b",
+    "content-hash": "348e5769ad9fda170c6702f6105a7011",
     "packages": [
         {
             "name": "brick/math",
@@ -507,6 +507,49 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "faicchia/boring-avatars",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/faicchia/boring-avatars.git",
+                "reference": "e7772a70049842fc6d4b5c9e18e982379ef7b27a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/faicchia/boring-avatars/zipball/e7772a70049842fc6d4b5c9e18e982379ef7b27a",
+                "reference": "e7772a70049842fc6d4b5c9e18e982379ef7b27a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.22"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Faicchia\\BoringAvatars\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Davide Pio Faicchia",
+                    "email": "da.faicchia@gmail.com"
+                }
+            ],
+            "description": "Generate boring avatars in PHP",
+            "support": {
+                "issues": "https://github.com/faicchia/boring-avatars/issues",
+                "source": "https://github.com/faicchia/boring-avatars/tree/1.0.0"
+            },
+            "time": "2022-12-04T21:06:19+00:00"
         },
         {
             "name": "fruitcake/php-cors",

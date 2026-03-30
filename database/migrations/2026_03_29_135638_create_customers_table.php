@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('project_origin')->nullable(); // e.g., Creedigo, ROKU, Kyoomi, Glocult
+            $table->string('status')->default('active'); // active, inactive
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('customers');
     }
 };

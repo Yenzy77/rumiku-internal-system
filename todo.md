@@ -1,7 +1,7 @@
 RUMIKU PROJECT: TODO LIST
 
-Module 1: Team Management
-Status: Completed
+Module 1: Team Management — Notion-Style Dynamic Properties
+Status: Refactored & Completed
 
 Tahap 1: Fondasi Database dan User Role
 [x] Buat Migration untuk tabel roles (Admin, Member).
@@ -42,6 +42,25 @@ Tahap 8: Enhancements / Revisi UI
 [x] Mengubah tampilan Team Tasks agar dikelompokkan berdasarkan status.
 [x] Menambahkan filter deadline (Paling dekat, Paling jauh).
 [x] Menambahkan metrik ringkasan Omni-channel dan Social Media di Dashboard.
+
+Tahap 9: Refaktorisasi Notion-Style (EAV Dynamic Properties)
+[x] Buat migration properties (name, slug, type, icon, options, sort_order, is_default).
+[x] Buat migration task_values (task_id, property_id, value) dengan unique constraint.
+[x] Simplifikasi tabel tasks (hanya title, created_by).
+[x] Buat model Property & TaskValue dengan relasi Eloquent.
+[x] Refaktor model Task — backward-compatible accessors untuk status, assignee, due_date.
+[x] Refaktor TaskController — dynamic column loading, EAV-based grouping.
+[x] Refaktor TaskForm Livewire — auto-generate input per tipe properti (9 tipe).
+[x] Refaktor task-form.blade.php — UI untuk semua tipe: text, number, select, multi_select, status, date, person, checkbox, url.
+[x] Refaktor tasks/index.blade.php — dynamic column headers & cell rendering.
+[x] Tambah fitur Add/Delete Property dari UI slide-over.
+[x] Update DatabaseSeeder — 5 default properties + 20 tasks dengan values.
+[x] Update routes/web.php — dashboard queries via EAV (TaskValue).
+[x] Hapus TaskStatusUpdate Livewire component (tidak lagi diperlukan).
+[x] Refinement: Penggunaan "Quick Insight Badges" sebagai ringkasan tugas di header.
+[x] Refinement: Tombol "+ Create New Task" yang minimalis (icon-only).
+[x] Refinement: Pembersihan heading ganda untuk UI yang lebih clean.
+[x] Refinement: Fitur Sorting modern berbasis icon (Deadline, Judul, Terbaru).
 
 Module 2: Bookkeeping & Analytics
 Status: Completed
@@ -123,9 +142,22 @@ Status: Completed
 [x] Fitur Outbound Messaging & Alpine.js Notifications.
 
 Module 6: Marketing
-Status: Pending
-[ ] Rencana kampanye email & broadcast WA.
-[ ] CRM Dashboard & Customer Segmentation.
+Status: In Progress
+
+Tahap 1: Perencanaan Arsitektur & Database
+[x] Perbarui dokumen (system_map.md & todo.md) untuk mengakomodasi Modul 6.
+[x] Rancang skema database tabel customers dan campaigns.
+[x] Buat struktur migration dan Eloquent Model di Laravel 13 untuk Customer & Campaign.
+[x] Desain konsep konseptual struktur UI Livewire (CRM & Campaign Form).
+
+Tahap 2: Manajemen Pelanggan (CRM Dashboard)
+[ ] Buat tampilan antarmuka CRM (tabel modern, filter segmentasi proyek).
+[ ] Buat relasi fitur/UI untuk Import atau pembuatan kontak baru.
+
+Tahap 3: Campaign Manager
+[ ] Buat tampilan "Slide-over (Peek)" untuk Form Pembuatan Kampanye.
+[ ] Buat logika pengiriman payload Webhook ke n8n untuk trigger kampanye (WA/Email).
+[ ] Tambahkan logic penjadwalan (scheduled_at) dengan integrasi cron job/scheduler Laravel.
 
 UI/UX Refinement & Branding
 Status: Completed
@@ -136,6 +168,8 @@ Status: Completed
 [x] Refaktor Dashboard ke Bento Grid Layout (Phase 4).
 [x] Optimalisasi Spacing & Padding Global (Premium Look).
 [x] Implementasi Custom Select Component (x-custom-select) di seluruh modul.
+[x] Penambahan dukungan Icon pada x-custom-select.
 [x] Implementasi "Peek" Slide-over Interface untuk Task Management.
 [x] Optimalisasi Kontras Field Input di Mode Gelap (zinc-800/70 Background).
 [x] Implementasi Global Modern Scrollbar (Auto-adapt Mode Terang/Gelap).
+[x] Integrasi Boring Avatars (x-boring-avatar) di seluruh dashboard dan tugas.
