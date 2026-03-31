@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'RUMIKU System') }}</title>
+    <title>RUMIKU Internal System</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('logo/FA RUMI KULTURA UTOPIA_Logogram favicon.svg') }}">
+    <link rel="shortcut icon" href="{{ asset('logo/FA RUMI KULTURA UTOPIA_Logogram favicon.svg') }}">
 
     <!-- Dark Mode Initializer -->
     <script>
